@@ -93,6 +93,16 @@ case class User(user: String) extends
 
 object Account extends
    Request(Twitter.host / "account") with Js {
+   /**
+    * Returns an HTTP 200 OK response code and a representation of the requesting user if authentication was successful; 
+    * returns a 401 status code and an error message if not. Use this method to test if supplied user credentials are valid.
+    * https://dev.twitter.com/docs/api/1/get/account/verify_credentials 
+    */
+   def verify_credentials(consumer: Consumer, token: Token, include_entities: Boolean = false, skip_status: Boolean = false) = 
+     this / "verify_credentials.json" <<? Map(
+       "include_entities" -> include_entities.toString, 
+       "skip_status" -> skip_status.toString) <@(consumer, token) ># obj
+         
    /** ip based rate limit status */
    def rate_limit_status = this / "rate_limit_status.json" ># obj
    /** authenticated user rate limit status */
